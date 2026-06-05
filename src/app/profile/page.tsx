@@ -1,6 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import Link from "next/link";
 import { Star, Handshake, ClipboardList, TrendingUp, Award, CalendarDays } from "lucide-react";
 import { MOCK_POINTS_EVENTS } from "@/lib/mock-data/helpers";
@@ -15,7 +16,7 @@ import { formatDate, formatRelativeDate } from "@/lib/utils/format";
 import RequestCard from "@/components/requests/RequestCard";
 import clsx from "clsx";
 
-export default function ProfilePage() {
+function ProfileContent() {
   const searchParams = useSearchParams();
   const { currentUser, allUsers, loading } = useAuth();
   const { requests, helperProfiles, volunteerForRequest } = useAppData();
@@ -213,5 +214,17 @@ export default function ProfilePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProfilePage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <ProfileContent />
+    </Suspense>
   );
 }
