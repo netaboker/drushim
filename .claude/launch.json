@@ -1,0 +1,15 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "tovyahu-board (Next.js dev)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": ".",
+      "port": 3000,
+      "url": "http://localhost:3000",
+      "script": "dev",
+      "framework": "nextjs"
+    }
+  ]
+}
