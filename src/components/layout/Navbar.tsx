@@ -321,13 +321,7 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Mobile menu button */}
-            <button
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              onClick={() => setMobileOpen((v) => !v)}
-            >
-              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+            {/* Mobile menu button - hidden since BottomNav handles mobile nav */}
           </div>
         </div>
       </div>

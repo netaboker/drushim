@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Heart } from "lucide-react";
 
-export default function Footer() {
+export default function Footer({ className }: { className?: string }) {
   return (
-    <footer className="bg-white border-t border-gray-100 mt-auto">
+    <footer className={`bg-white border-t border-gray-100 mt-auto ${className ?? ""}`}>
       <div className="page-container py-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
           <div className="flex items-center gap-1.5">
