@@ -1,19 +1,11 @@
 "use client";
 
-import { RequestCategory, RequestStatus } from "@/lib/types";
+import { RequestCategory, RequestStatus, CATEGORY_ICONS } from "@/lib/types";
 import { Search } from "lucide-react";
 
 const CATEGORIES: RequestCategory[] = [
-  "לימודי",
-  "טכני",
-  "חברתי",
-  "ארגוני",
-  "יצירתי",
-  "אירועים בית ספריים",
-  "קהילתי",
+  "לימודי", "טכני", "חברתי", "ארגוני", "יצירתי", "אירועים בית ספריים", "קהילתי",
 ];
-
-const STATUSES: RequestStatus[] = ["פתוח", "בטיפול", "הושלם", "נסגר"];
 
 interface RequestFiltersProps {
   search: string;
@@ -33,52 +25,44 @@ export default function RequestFilters({
   onStatusChange,
 }: RequestFiltersProps) {
   return (
-    <div className="flex flex-col gap-4">
-      {/* Search */}
+    <div className="flex flex-col gap-3">
+      {/* חיפוש */}
       <div className="relative">
-        <Search
-          size={16}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-        />
+        <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
         <input
           type="text"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="חיפוש בבקשות..."
-          className="input-field pr-9"
+          placeholder="🔍 חפש/י בקשה..."
+          className="w-full h-11 pr-9 pl-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
         />
       </div>
 
-      {/* Filters row */}
-      <div className="flex flex-wrap gap-2 items-center">
-        {/* Status filter */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs text-gray-500 font-medium">סטטוס:</span>
-          {(["הכל", ...STATUSES] as const).map((s) => (
-            <button
-              key={s}
-              onClick={() => onStatusChange(s as RequestStatus | "הכל")}
-              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${
-                selectedStatus === s
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-gray-600 border-gray-200 hover:border-blue-300"
-              }`}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
+      {/* סטטוס — שורה אחת */}
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        {(["הכל", "פתוח", "בטיפול", "הושלם"] as const).map((s) => (
+          <button
+            key={s}
+            onClick={() => onStatusChange(s as RequestStatus | "הכל")}
+            className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+              selectedStatus === s
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+            }`}
+          >
+            {s === "הכל" ? "🌟 הכל" : s === "פתוח" ? "🟢 פתוח" : s === "בטיפול" ? "🔵 בטיפול" : "✅ הושלם"}
+          </button>
+        ))}
       </div>
 
-      {/* Category chips */}
-      <div className="flex items-center gap-1.5 flex-wrap">
-        <span className="text-xs text-gray-500 font-medium">קטגוריה:</span>
+      {/* קטגוריות — גלילה אופקית */}
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         <button
           onClick={() => onCategoryChange("הכל")}
-          className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${
+          className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
             selectedCategory === "הכל"
-              ? "bg-blue-600 text-white border-blue-600"
-              : "bg-white text-gray-600 border-gray-200 hover:border-blue-300"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
           }`}
         >
           הכל
@@ -87,12 +71,13 @@ export default function RequestFilters({
           <button
             key={c}
             onClick={() => onCategoryChange(c)}
-            className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${
+            className={`flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
               selectedCategory === c
-                ? "bg-blue-600 text-white border-blue-600"
-                : "bg-white text-gray-600 border-gray-200 hover:border-blue-300"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
           >
+            <span>{CATEGORY_ICONS[c]}</span>
             {c}
           </button>
         ))}

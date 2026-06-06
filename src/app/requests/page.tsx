@@ -40,26 +40,18 @@ export default function RequestsPage() {
 
   return (
     <div className="page-container py-8 animate-fade-in">
-      <div className="flex items-start justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-3xl font-black text-gray-900 flex items-center gap-3">
-            <ClipboardList size={30} className="text-blue-600" />
-            לוח הבקשות
-          </h1>
-          <p className="text-gray-500 mt-1">כאן תמצאו מי צריך עזרה — ותוכלו להתנדב</p>
-          <div className="flex gap-4 mt-3 text-sm">
-            <span className="text-green-600 font-semibold">{openCount} פתוח</span>
-            <span className="text-blue-600 font-semibold">{inProgressCount} בטיפול</span>
-            <span className="text-gray-500 font-semibold">{doneCount} הושלמו</span>
-          </div>
+      {/* כותרת */}
+      <div className="mb-5">
+        <h1 className="text-2xl font-black text-gray-900">🙋 מי צריך עזרה?</h1>
+        <div className="flex gap-3 mt-2 text-sm">
+          <span className="text-green-600 font-bold">{openCount} פתוחות</span>
+          <span className="text-blue-600 font-bold">{inProgressCount} בטיפול</span>
+          <span className="text-gray-400">{doneCount} הושלמו</span>
         </div>
-        <Link href="/requests/new" className="btn-primary flex-shrink-0">
-          <Plus size={18} />
-          בקשה חדשה
-        </Link>
       </div>
 
-      <div className="card p-5 mb-6">
+      {/* פילטרים */}
+      <div className="mb-5">
         <RequestFilters
           search={search}
           onSearchChange={setSearch}
