@@ -78,7 +78,6 @@ export default function RequestsPage() {
               <RequestCard
                 key={r.id}
                 request={r}
-                onVolunteer={(id) => volunteerForRequest(id, currentUser.id)}
               />
             ))}
           </div>

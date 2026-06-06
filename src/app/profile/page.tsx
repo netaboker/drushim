@@ -186,7 +186,7 @@ function ProfileContent() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {myRequests.map((r) => (
                   <RequestCard key={r.id} request={r} compact
-                    onVolunteer={(id) => volunteerForRequest(id, currentUser.id)} />
+                    />
                 ))}
               </div>
             </div>
@@ -201,7 +201,7 @@ function ProfileContent() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {helpedRequests.map((r) => (
                   <RequestCard key={r.id} request={r} compact
-                    onVolunteer={(id) => volunteerForRequest(id, currentUser.id)} />
+                    />
                 ))}
               </div>
             </div>

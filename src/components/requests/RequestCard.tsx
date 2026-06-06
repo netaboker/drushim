@@ -9,32 +9,17 @@ import clsx from "clsx";
 
 interface RequestCardProps {
   request: HelpRequest;
-  onVolunteer?: (id: string) => void;
   compact?: boolean;
 }
 
-export default function RequestCard({ request, onVolunteer, compact = false }: RequestCardProps) {
+export default function RequestCard({ request, compact = false }: RequestCardProps) {
   const { currentUser } = useAuth();
 
   const hasVolunteered = request.volunteerIds.includes(currentUser.id);
   const isAssigned = request.assignedHelperIds.includes(currentUser.id);
-  const isCreator = request.createdById === currentUser.id;
   const isOpen = request.status === "פתוח";
   const isFull = request.assignedHelperIds.length >= request.helpersNeeded;
   const isDone = request.status === "הושלם";
-
-  const canVolunteer =
-    isOpen &&
-    !isCreator &&
-    !isFull &&
-    request.approvalStatus === "approved" &&
-    currentUser.role === "student";
-
-  function handleVolunteer(e: React.MouseEvent) {
-    e.preventDefault();
-    e.stopPropagation();
-    onVolunteer?.(request.id);
-  }
 
   return (
     <Link href={`/requests/${request.id}`} className="block group">
@@ -74,7 +59,7 @@ export default function RequestCard({ request, onVolunteer, compact = false }: R
           </span>
         </div>
 
-        {/* אינדיקטור סטטוס */}
+        {/* אינדיקטור — ללא כפתור פעיל */}
         <div className="mt-auto pt-2 border-t border-gray-50">
           {isDone ? (
             <div className="flex items-center gap-1.5 text-xs text-green-600 font-medium">
