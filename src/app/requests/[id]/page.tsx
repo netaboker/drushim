@@ -97,8 +97,8 @@ export default function RequestDetailPage() {
     : volunteers.slice(0, 4);
 
   function shareOnWhatsApp() {
-    const url = `${window.location.origin}/requests/${request.id}`;
-    const text = `היי! 👋 ראיתי בלוח טוביהו בקשה שאולי תוכל/י לעזור בה:\n\n*${request.title}*\n📅 ${request.when}\n\n${url}`;
+    const url = `${window.location.origin}/requests/${params.id}`;
+    const text = `היי! 👋 ראיתי בלוח טוביהו בקשה שאולי תוכל/י לעזור בה:\n\n*${request?.title}*\n📅 ${request?.when}\n\n${url}`;
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
   }
 
