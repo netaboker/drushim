@@ -5,11 +5,11 @@ import React, {
   useContext,
   useState,
   useCallback,
-  useEffect,
   ReactNode,
 } from "react";
+import useSWR from "swr";
 import { User, UserRole } from "@/lib/types";
-import { supabase } from "@/lib/supabase/client";
+import { fetchUsers, rowToUser } from "@/lib/supabase/fetchers";
 import { MOCK_USERS, CURRENT_USER_ID } from "@/lib/mock-data";
 
 interface AuthContextValue {
@@ -25,40 +25,17 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-function rowToUser(row: Record<string, unknown>): User {
-  return {
-    id: row.id as string,
-    name: row.name as string,
-    role: row.role as UserRole,
-    class: row.class as string | undefined,
-    position: row.position as string | undefined,
-    avatarInitials: row.avatar_initials as string,
-    avatarColor: row.avatar_color as string,
-    points: row.points as number,
-    rank: row.rank as User["rank"],
-    joinedAt: row.joined_at as string,
-    isActive: row.is_active as boolean,
-  };
-}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // Start with mock data so UI is never empty while Supabase loads
-  const [allUsers, setAllUsers] = useState<User[]>(MOCK_USERS);
   const [currentUserId, setCurrentUserId] = useState(CURRENT_USER_ID);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchUsers() {
-      const { data, error } = await supabase.from("users").select("*");
-      if (!error && data && data.length > 0) {
-        setAllUsers(data.map(rowToUser));
-      }
-      setLoading(false);
-    }
-    fetchUsers();
-  }, []);
+  // SWR — cache משותף עם "users", לא מרענן מחדש בכל navigation
+  const { data: fetchedUsers, isLoading } = useSWR("users", fetchUsers);
 
-  // Always has a fallback (mock data) so currentUser is never null
+  // Fallback למock data בזמן טעינה
+  const allUsers = (fetchedUsers && fetchedUsers.length > 0) ? fetchedUsers : MOCK_USERS;
+
+  // Always has a fallback so currentUser is never null
   const currentUser = allUsers.find((u) => u.id === currentUserId) ?? allUsers[0];
 
   const isAdmin = currentUser?.role === "admin";
@@ -74,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         currentUser,
-        loading,
+        loading: isLoading,
         setCurrentUserId: handleSetUser,
         allUsers,
         isAdmin,

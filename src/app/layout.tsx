@@ -5,6 +5,7 @@ import { AppDataProvider } from "@/context/AppDataContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import BottomNav from "@/components/layout/BottomNav";
+import SWRProvider from "@/components/SWRProvider";
 
 export const metadata: Metadata = {
   title: "לוח טוביהו – לוח הדרושים הבית ספרי",
@@ -32,6 +33,7 @@ export default function RootLayout({
         />
       </head>
       <body className="flex flex-col min-h-screen bg-slate-50">
+        <SWRProvider>
         <AuthProvider>
           <AppDataProvider>
             <Navbar />
@@ -40,6 +42,7 @@ export default function RootLayout({
             <BottomNav />
           </AppDataProvider>
         </AuthProvider>
+        </SWRProvider>
       </body>
     </html>
   );
