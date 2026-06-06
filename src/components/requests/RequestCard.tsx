@@ -74,38 +74,30 @@ export default function RequestCard({ request, onVolunteer, compact = false }: R
           </span>
         </div>
 
-        {/* כפתור עזרה — בולט ומרכזי */}
-        <div className="mt-auto pt-2">
+        {/* אינדיקטור סטטוס */}
+        <div className="mt-auto pt-2 border-t border-gray-50">
           {isDone ? (
-            <div className="flex items-center justify-center gap-1.5 py-2 rounded-xl bg-gray-100 text-gray-500 text-sm font-medium">
-              <CheckCircle2 size={15} />
+            <div className="flex items-center gap-1.5 text-xs text-green-600 font-medium">
+              <CheckCircle2 size={13} />
               הושלם 🎉
             </div>
           ) : isAssigned ? (
-            <div className="flex items-center justify-center gap-1.5 py-2 rounded-xl bg-blue-50 text-blue-700 text-sm font-semibold">
-              <CheckCircle2 size={15} />
+            <div className="flex items-center gap-1.5 text-xs text-blue-600 font-semibold">
+              <CheckCircle2 size={13} />
               את/ה בצוות ✓
             </div>
           ) : hasVolunteered ? (
-            <button
-              onClick={handleVolunteer}
-              className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-green-100 text-green-700 text-sm font-semibold hover:bg-red-50 hover:text-red-500 transition-colors"
-            >
-              <CheckCircle2 size={15} />
-              נרשמת לעזרה — לחץ/י לביטול
-            </button>
-          ) : canVolunteer ? (
-            <button
-              onClick={handleVolunteer}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-blue-600 text-white text-sm font-bold shadow-sm shadow-blue-200 hover:bg-blue-700 active:scale-95 transition-all"
-            >
-              <HandHelping size={16} />
-              אני יכול/ה לעזור! 🙋
-            </button>
-          ) : isFull && isOpen ? (
-            <div className="text-center text-xs text-gray-400 py-2">מלא — אין מקום פנוי</div>
-          ) : isCreator ? (
-            <div className="text-center text-xs text-blue-500 font-medium py-2">הבקשה שלך</div>
+            <div className="flex items-center gap-1.5 text-xs text-green-600 font-semibold">
+              <CheckCircle2 size={13} />
+              נרשמת לעזרה ✓
+            </div>
+          ) : isOpen && !isFull ? (
+            <div className="flex items-center gap-1.5 text-xs text-blue-500 font-medium">
+              <HandHelping size={13} />
+              לחץ/י לפרטים והתנדבות
+            </div>
+          ) : isFull ? (
+            <div className="text-xs text-gray-400">מלא</div>
           ) : null}
         </div>
       </div>

@@ -34,7 +34,8 @@ const NAV_LINKS = [
 const ADMIN_LINK = { href: "/admin", label: "ניהול", icon: Shield };
 
 export default function Navbar() {
-  const { currentUser, setCurrentUserId, canModerate } = useAuth();
+  const { currentUser, setCurrentUserId, canModerate, isTeacher, isStaff, isAdmin } = useAuth();
+  const canPublish = isTeacher || isStaff || isAdmin;
   const {
     getNotificationsForUser,
     markAsRead,
@@ -113,12 +114,14 @@ export default function Navbar() {
 
           {/* Right side */}
           <div className="flex items-center gap-2">
-            <Link
-              href="/requests/new"
-              className="hidden sm:flex btn-primary text-sm py-2 px-4"
-            >
-              + בקשה חדשה
-            </Link>
+            {canPublish && (
+              <Link
+                href="/requests/new"
+                className="hidden sm:flex btn-primary text-sm py-2 px-4"
+              >
+                + בקשה חדשה
+              </Link>
+            )}
 
             {/* ── Notification bell ───────────────────────────────────── */}
             <div ref={notifRef} className="relative">

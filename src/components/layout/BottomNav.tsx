@@ -16,7 +16,8 @@ const NAV_ITEMS = [
 
 export default function BottomNav() {
   const pathname = usePathname();
-  const { canModerate } = useAuth();
+  const { canModerate, isTeacher, isStaff, isAdmin } = useAuth();
+  const canPublish = isTeacher || isStaff || isAdmin;
   const { unreadCount } = useAppData();
 
   return (
@@ -36,16 +37,20 @@ export default function BottomNav() {
           </Link>
         ))}
 
-        {/* כפתור פרסום מרכזי */}
-        <Link
-          href="/requests/new"
-          className="flex flex-col items-center gap-0.5 -mt-5"
-        >
-          <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-200 active:scale-95 transition-transform">
-            <Plus size={28} className="text-white" strokeWidth={2.5} />
-          </div>
-          <span className="text-[10px] font-medium text-blue-600 mt-0.5">פרסם</span>
-        </Link>
+        {/* כפתור פרסום מרכזי — למורים/צוות בלבד */}
+        {canPublish ? (
+          <Link
+            href="/requests/new"
+            className="flex flex-col items-center gap-0.5 -mt-5"
+          >
+            <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-200 active:scale-95 transition-transform">
+              <Plus size={28} className="text-white" strokeWidth={2.5} />
+            </div>
+            <span className="text-[10px] font-medium text-blue-600 mt-0.5">פרסם</span>
+          </Link>
+        ) : (
+          <div className="w-14" />
+        )}
 
         {NAV_ITEMS.slice(2).map(({ href, label, icon: Icon }) => (
           <Link

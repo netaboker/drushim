@@ -24,6 +24,24 @@ export default function NewRequestPage() {
   const { currentUser } = useAuth();
   const { submitRequest } = useAppData();
 
+  // תלמידים לא יכולים לפרסם בקשות
+  if (currentUser && currentUser.role === "student") {
+    return (
+      <div className="page-container py-20 text-center max-w-md mx-auto">
+        <div className="text-6xl mb-4">🔒</div>
+        <h1 className="text-2xl font-black text-gray-900 mb-2">אין גישה</h1>
+        <p className="text-gray-500 mb-6">
+          כרגע רק מורים יכולים לפרסם בקשות לעזרה.
+          <br />
+          תוכל/י להתנדב לבקשות קיימות!
+        </p>
+        <Link href="/requests" className="btn-primary">
+          לראות בקשות לעזרה
+        </Link>
+      </div>
+    );
+  }
+
   const [form, setForm] = useState({
     title: "",
     category: "" as RequestCategory | "",
