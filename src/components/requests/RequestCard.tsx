@@ -87,6 +87,17 @@ export default function RequestCard({ request, compact = false }: RequestCardPro
           </span>
         </div>
 
+        {/* שכבות */}
+        {request.targetGrades && request.targetGrades.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {request.targetGrades.map((g) => (
+              <span key={g} className="px-2 py-0.5 rounded-full bg-white/70 text-indigo-700 text-xs font-bold border border-indigo-200">
+                שכבה {g}
+              </span>
+            ))}
+          </div>
+        )}
+
         {/* סטטוס */}
         <div className="mt-auto pt-3 border-t border-white/60">
           {isDone ? (

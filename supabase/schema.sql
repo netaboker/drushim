@@ -93,6 +93,9 @@ alter table helper_profiles enable row level security;
 alter table notifications enable row level security;
 alter table points_events enable row level security;
 
+-- הוספת עמודת שכבות אם לא קיימת
+alter table help_requests add column if not exists target_grades text[] not null default '{}';
+
 drop policy if exists "allow all users" on users;
 drop policy if exists "allow all help_requests" on help_requests;
 drop policy if exists "allow all request_updates" on request_updates;

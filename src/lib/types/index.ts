@@ -77,6 +77,11 @@ export type RequestCategory =
   | "אירועים בית ספריים"
   | "קהילתי";
 
+// ─── שכבות ────────────────────────────────────────────────────────────────────
+
+export const GRADE_LEVELS = ["ז'", "ח'", "ט'", "י'", "י\"א", "י\"ב"] as const;
+export type GradeLevel = typeof GRADE_LEVELS[number];
+
 export const CATEGORY_COLORS: Record<RequestCategory, string> = {
   לימודי: "bg-blue-100 text-blue-700 border-blue-200",
   טכני: "bg-gray-100 text-gray-700 border-gray-200",
@@ -121,6 +126,7 @@ export interface HelpRequest {
   category: RequestCategory;
   description: string;
   targetAudience: string;
+  targetGrades?: GradeLevel[]; // שכבות מיועדות (ריק/undefined = כל השכבות)
   when: string;
   status: RequestStatus;
   urgency: UrgencyLevel;

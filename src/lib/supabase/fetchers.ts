@@ -83,6 +83,7 @@ export async function fetchAllData(): Promise<{
     category: r.category as HelpRequest["category"],
     description: r.description,
     targetAudience: r.target_audience,
+    targetGrades: ((r.target_grades as string[]) ?? []) as import("@/lib/types").GradeLevel[],
     when: r.when,
     status: r.status as HelpRequest["status"],
     urgency: r.urgency as HelpRequest["urgency"],

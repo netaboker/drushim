@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ArrowRight, Send, Info, Megaphone, Clock, Bell, Zap, CheckCircle2, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useAppData } from "@/context/AppDataContext";
-import { RequestCategory, UrgencyLevel, CATEGORY_ICONS } from "@/lib/types";
+import { RequestCategory, UrgencyLevel, GradeLevel, CATEGORY_ICONS, GRADE_LEVELS } from "@/lib/types";
 
 const STAFF_ROLES = new Set(["teacher", "staff", "admin"]);
 
@@ -18,6 +18,7 @@ const TARGET_OPTIONS = [
   "תלמידים בלבד", "מורים בלבד", "תלמידים ומורים", "כלל הצוות", "כלל הקהילה",
 ];
 const HELPERS_OPTIONS = [1, 2, 3, 4, 5, 6, 8, 10];
+const ALL_GRADES = [...GRADE_LEVELS];
 
 export default function NewRequestPage() {
   const router = useRouter();
@@ -47,12 +48,22 @@ export default function NewRequestPage() {
     category: "" as RequestCategory | "",
     description: "",
     targetAudience: "",
+    targetGrades: [] as GradeLevel[], // ריק = כל השכבות
     when: "",
     helpersNeeded: 1,
     urgency: "בינונית" as UrgencyLevel,
     requiresStaffApproval: false,
     contactPerson: currentUser?.name ?? "",
   });
+
+  function toggleGrade(grade: GradeLevel) {
+    setForm((prev) => ({
+      ...prev,
+      targetGrades: prev.targetGrades.includes(grade)
+        ? prev.targetGrades.filter((g) => g !== grade)
+        : [...prev.targetGrades, grade],
+    }));
+  }
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [submittedRequestId, setSubmittedRequestId] = useState<string | null>(null);
@@ -81,6 +92,7 @@ export default function NewRequestPage() {
       category: form.category as RequestCategory,
       description: form.description,
       targetAudience: form.targetAudience,
+      targetGrades: form.targetGrades,
       when: form.when,
       helpersNeeded: form.helpersNeeded,
       urgency: form.urgency,
@@ -366,6 +378,38 @@ export default function NewRequestPage() {
             />
             {errors.when && <p className="text-xs text-red-500 mt-1">{errors.when}</p>}
           </div>
+        </div>
+
+        {/* שכבות */}
+        <div>
+          <label className="label">
+            לאיזה שכבות?
+            <span className="text-gray-400 font-normal mr-1">(לא מסמן = כל השכבות)</span>
+          </label>
+          <div className="flex gap-2 flex-wrap">
+            {ALL_GRADES.map((grade) => (
+              <button
+                key={grade}
+                type="button"
+                onClick={() => toggleGrade(grade)}
+                className={`px-4 py-2 rounded-2xl border-2 font-bold text-sm transition-all active:scale-95 ${
+                  form.targetGrades.includes(grade)
+                    ? "bg-indigo-600 text-white border-indigo-600"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-indigo-300"
+                }`}
+              >
+                שכבה {grade}
+              </button>
+            ))}
+          </div>
+          {form.targetGrades.length > 0 && (
+            <p className="text-xs text-indigo-600 font-medium mt-2">
+              ✓ מיועד לשכבות: {form.targetGrades.map((g) => `שכבה ${g}`).join(", ")}
+            </p>
+          )}
+          {form.targetGrades.length === 0 && (
+            <p className="text-xs text-gray-400 mt-2">מיועד לכל השכבות</p>
+          )}
         </div>
 
         {/* Helpers + Urgency */}

@@ -118,7 +118,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
     const { error } = await supabase.from("help_requests").insert({
       id, title: data.title, category: data.category, description: data.description,
-      target_audience: data.targetAudience, when: data.when, status: "פתוח",
+      target_audience: data.targetAudience, target_grades: data.targetGrades ?? [], when: data.when, status: "פתוח",
       urgency: data.urgency, helpers_needed: data.helpersNeeded,
       assigned_helper_ids: [], volunteer_ids: [], created_by_id: data.createdById,
       created_at: now, updated_at: now, requires_staff_approval: data.requiresStaffApproval,
