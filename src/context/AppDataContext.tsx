@@ -124,6 +124,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
     const newReq: HelpRequest = { ...data, id, status: "פתוח", assignedHelperIds: [], volunteerIds: [], createdAt: now, updatedAt: now, updates: [], approvalStatus };
     updateCache((prev) => ({ ...prev, requests: [newReq, ...prev.requests] }));
+    // רענון מ-Supabase כדי לוודא שהנתונים מסונכרנים
+    mutateCache();
 
     if (!autoPublish) addNotification(ADMIN_USER_ID, "volunteer_received", "בקשה חדשה ממתינה לאישור", `הבקשה "${data.title}" הוגשה וממתינה לאישורך.`, id, "request");
     return id;

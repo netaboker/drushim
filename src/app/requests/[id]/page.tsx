@@ -35,6 +35,7 @@ export default function RequestDetailPage() {
   const { currentUser, canModerate } = useAuth();
   const {
     requests,
+    loading,
     volunteerForRequest,
     assignHelper,
     updateRequestStatus,
@@ -44,11 +45,21 @@ export default function RequestDetailPage() {
 
   const request = requests.find((r) => r.id === params.id);
 
+  // מחכים לטעינה לפני שמצהירים "לא נמצא"
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   if (!request) {
     return (
       <div className="page-container py-16 text-center">
-        <p className="text-gray-500 text-lg">הבקשה לא נמצאה</p>
-        <Link href="/requests" className="btn-primary mt-4 inline-flex">
+        <p className="text-5xl mb-4">🔍</p>
+        <p className="text-gray-600 text-lg font-medium">הבקשה לא נמצאה</p>
+        <Link href="/" className="btn-primary mt-4 inline-flex">
           חזרה ללוח
         </Link>
       </div>
