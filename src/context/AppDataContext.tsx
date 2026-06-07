@@ -7,7 +7,7 @@ import React, {
   useCallback,
   ReactNode,
 } from "react";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import {
   HelpRequest,
   HelperProfile,
@@ -73,12 +73,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
 
   // SWR — טוען פעם אחת ומשמר cache ל-5 דקות
-  const { data, isLoading } = useSWR(APP_DATA_KEY, fetchAllData, {
-    onSuccess: (d) => {
-      // עדכן את cache השמות
-      // (נעשה ב-AuthContext שכבר מביא users)
-    },
-  });
+  const { data, isLoading, mutate: mutateCache } = useSWR(APP_DATA_KEY, fetchAllData);
 
   const requests = data?.requests ?? [];
   const helperProfiles = data?.helperProfiles ?? [];
@@ -98,10 +93,11 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     }, ...prev]);
   }
 
-  // ── Helper: עדכון cache מקומי ─────────────────────────────────────────────
+  // ── Helper: עדכון cache מקומי (ללא refetch) ──────────────────────────────
   function updateCache(updater: (prev: { requests: HelpRequest[]; helperProfiles: HelperProfile[] }) => { requests: HelpRequest[]; helperProfiles: HelperProfile[] }) {
-    mutate(APP_DATA_KEY, (prev: { requests: HelpRequest[]; helperProfiles: HelperProfile[] } | undefined) =>
-      updater(prev ?? { requests: [], helperProfiles: [] }), false
+    mutateCache(
+      (prev) => updater(prev ?? { requests: [], helperProfiles: [] }),
+      { revalidate: false }
     );
   }
 
