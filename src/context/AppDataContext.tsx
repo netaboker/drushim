@@ -120,7 +120,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       created_at: now, updated_at: now, requires_staff_approval: data.requiresStaffApproval,
       contact_person: data.contactPerson, approval_status: approvalStatus,
     });
-    if (error) { console.error(error); return id; }
+    if (error) { console.error(error); throw new Error(error.message); }
 
     const newReq: HelpRequest = { ...data, id, status: "פתוח", assignedHelperIds: [], volunteerIds: [], createdAt: now, updatedAt: now, updates: [], approvalStatus };
     updateCache((prev) => ({ ...prev, requests: [newReq, ...prev.requests] }));

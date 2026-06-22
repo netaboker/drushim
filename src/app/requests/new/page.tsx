@@ -67,6 +67,8 @@ export default function NewRequestPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [submittedRequestId, setSubmittedRequestId] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isStaffUser = STAFF_ROLES.has(currentUser?.role ?? "");
 
@@ -87,21 +89,30 @@ export default function NewRequestPage() {
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
 
-    const newId = await submitRequest({
-      title: form.title,
-      category: form.category as RequestCategory,
-      description: form.description,
-      targetAudience: form.targetAudience,
-      targetGrades: form.targetGrades,
-      when: form.when,
-      helpersNeeded: form.helpersNeeded,
-      urgency: form.urgency,
-      requiresStaffApproval: form.requiresStaffApproval,
-      contactPerson: form.contactPerson,
-      createdById: currentUser.id,
-    }, currentUser.role);
-    setSubmittedRequestId(newId);
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError(null);
+    try {
+      const newId = await submitRequest({
+        title: form.title,
+        category: form.category as RequestCategory,
+        description: form.description,
+        targetAudience: form.targetAudience,
+        targetGrades: form.targetGrades,
+        when: form.when,
+        helpersNeeded: form.helpersNeeded,
+        urgency: form.urgency,
+        requiresStaffApproval: form.requiresStaffApproval,
+        contactPerson: form.contactPerson,
+        createdById: currentUser.id,
+      }, currentUser.role);
+      setSubmittedRequestId(newId);
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError("שגיאה בשמירת הבקשה. אנא נסה/י שנית.");
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function set(field: string, value: unknown) {
@@ -488,13 +499,21 @@ export default function NewRequestPage() {
         </div>
 
         {/* Submit */}
+        {submitError && (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700 font-medium">
+            ⚠️ {submitError}
+          </div>
+        )}
         <div className="flex gap-3 pt-2 border-t border-gray-100">
           <button
             type="submit"
-            className={`btn-primary flex-1 ${isStaffUser ? "bg-green-600 hover:bg-green-700" : ""}`}
+            disabled={isSubmitting}
+            className={`btn-primary flex-1 disabled:opacity-60 disabled:cursor-not-allowed ${isStaffUser ? "bg-green-600 hover:bg-green-700" : ""}`}
           >
-            {isStaffUser ? <Zap size={18} /> : <Send size={18} />}
-            {isStaffUser ? "פרסם/י מיידית" : "שלח/י לאישור מנחם הרצוג"}
+            {isSubmitting ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : isStaffUser ? <Zap size={18} /> : <Send size={18} />}
+            {isSubmitting ? "שומר..." : isStaffUser ? "פרסם/י מיידית" : "שלח/י לאישור מנחם הרצוג"}
           </button>
           <Link href="/requests" className="btn-ghost flex-shrink-0">ביטול</Link>
         </div>
