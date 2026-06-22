@@ -32,10 +32,34 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-500 font-medium">טוען נתונים...</p>
+      <div className="animate-fade-in">
+        {/* Hero skeleton */}
+        <section className="bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-700 text-white">
+          <div className="page-container py-10">
+            <div className="h-6 w-48 bg-white/20 rounded-full mb-5 animate-pulse" />
+            <div className="h-10 w-72 bg-white/20 rounded-xl mb-3 animate-pulse" />
+            <div className="h-6 w-56 bg-white/20 rounded-xl mb-8 animate-pulse" />
+            <div className="flex gap-6">
+              {[1,2,3,4].map(i => <div key={i} className="h-10 w-24 bg-white/20 rounded-xl animate-pulse" />)}
+            </div>
+          </div>
+        </section>
+        {/* Cards skeleton */}
+        <div className="page-container py-8">
+          <div className="h-8 w-44 bg-gray-200 rounded-xl mb-6 animate-pulse" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[1,2,3,4,5,6].map(i => (
+              <div key={i} className="bg-gray-100 rounded-3xl p-4 h-48 animate-pulse flex flex-col gap-3">
+                <div className="flex justify-between">
+                  <div className="w-10 h-10 rounded-2xl bg-gray-200" />
+                  <div className="w-16 h-6 rounded-full bg-gray-200" />
+                </div>
+                <div className="h-5 bg-gray-200 rounded-lg w-3/4" />
+                <div className="h-4 bg-gray-200 rounded-lg w-full" />
+                <div className="h-4 bg-gray-200 rounded-lg w-1/2" />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );

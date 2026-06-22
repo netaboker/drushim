@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import useSWR from "swr";
 import { User, UserRole } from "@/lib/types";
-import { fetchUsers, rowToUser } from "@/lib/supabase/fetchers";
+import { fetchAllData } from "@/lib/supabase/fetchers";
 import { MOCK_USERS, CURRENT_USER_ID } from "@/lib/mock-data";
 
 interface AuthContextValue {
@@ -29,11 +29,11 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUserId, setCurrentUserId] = useState(CURRENT_USER_ID);
 
-  // SWR — cache משותף עם "users", לא מרענן מחדש בכל navigation
-  const { data: fetchedUsers, isLoading } = useSWR("users", fetchUsers);
+  // SWR — אותו key כמו AppDataContext, SWR ידדפ אוטומטית (בקשה אחת לשניהם)
+  const { data, isLoading } = useSWR("appData", fetchAllData);
 
   // Fallback למock data בזמן טעינה
-  const allUsers = (fetchedUsers && fetchedUsers.length > 0) ? fetchedUsers : MOCK_USERS;
+  const allUsers = (data?.users && data.users.length > 0) ? data.users : MOCK_USERS;
 
   // Always has a fallback so currentUser is never null
   const currentUser = allUsers.find((u) => u.id === currentUserId) ?? allUsers[0];

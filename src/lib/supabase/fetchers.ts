@@ -57,17 +57,20 @@ export async function fetchUsers(): Promise<User[]> {
 export async function fetchAllData(): Promise<{
   requests: HelpRequest[];
   helperProfiles: HelperProfile[];
+  users: User[];
 }> {
-  // שאילתות מקביליות — הכל בבת אחת
-  const [requestsRes, updatesRes, helpersRes] = await Promise.all([
+  // שאילתות מקביליות — הכל בבת אחת, כולל משתמשים
+  const [requestsRes, updatesRes, helpersRes, usersRes] = await Promise.all([
     supabase.from("help_requests").select("*").order("created_at", { ascending: false }),
     supabase.from("request_updates").select("*").order("created_at", { ascending: true }),
     supabase.from("helper_profiles").select("*").order("submitted_at", { ascending: false }),
+    supabase.from("users").select("*").order("points", { ascending: false }),
   ]);
 
   if (requestsRes.error) throw requestsRes.error;
   if (updatesRes.error) throw updatesRes.error;
   if (helpersRes.error) throw helpersRes.error;
+  if (usersRes.error) throw usersRes.error;
 
   // קיבוץ עדכונים לפי בקשה
   const updatesByRequest: Record<string, RequestUpdate[]> = {};
@@ -103,5 +106,6 @@ export async function fetchAllData(): Promise<{
   return {
     requests,
     helperProfiles: (helpersRes.data ?? []).map(rowToHelper),
+    users: (usersRes.data ?? []).map(rowToUser),
   };
 }
