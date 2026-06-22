@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import useSWR from "swr";
 import {
+  User,
   HelpRequest,
   HelperProfile,
   AppNotification,
@@ -94,9 +95,9 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
   }
 
   // ── Helper: עדכון cache מקומי (ללא refetch) ──────────────────────────────
-  function updateCache(updater: (prev: { requests: HelpRequest[]; helperProfiles: HelperProfile[] }) => { requests: HelpRequest[]; helperProfiles: HelperProfile[] }) {
+  function updateCache(updater: (prev: { requests: HelpRequest[]; helperProfiles: HelperProfile[]; users: User[] }) => { requests: HelpRequest[]; helperProfiles: HelperProfile[]; users: User[] }) {
     mutateCache(
-      (prev) => updater(prev ?? { requests: [], helperProfiles: [] }),
+      (prev) => updater(prev ?? { requests: [], helperProfiles: [], users: [] }),
       { revalidate: false }
     );
   }
