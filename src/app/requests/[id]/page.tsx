@@ -252,16 +252,16 @@ export default function RequestDetailPage() {
                     <div>
                       {justVolunteered ? (
                         <>
-                          <p className="font-bold text-green-800">תודה שנרשמת! 🎉</p>
+                          <p className="font-bold text-green-800">נרשמת בהצלחה! 🎉</p>
                           <p className="text-sm text-green-700">
-                            הפנייה שלך הועברה לבדיקה — תקבל/י התרעה כשתאושר.
+                            תודה! נעדכן אותך ברגע שהרישום יאושר.
                           </p>
                         </>
                       ) : (
                         <>
                           <p className="font-bold text-green-800">נרשמת לעזרה ✓</p>
                           <p className="text-sm text-green-700">
-                            הרישום שלך ממתין לאישור. תקבל/י התרעה בקרוב.
+                            ממתינים לאישור — נעדכן אותך בקרוב.
                           </p>
                         </>
                       )}
@@ -570,10 +570,10 @@ export default function RequestDetailPage() {
               <HandHelping size={28} className="text-indigo-600" />
             </div>
             <h3 className="text-xl font-black text-gray-900 text-center mb-2">
-              אישור התנדבות
+              רגע לפני... 🙌
             </h3>
             <p className="text-gray-600 text-center text-sm leading-relaxed mb-1">
-              האם אתה/את בטוח/ה שאתה/את רוצה להתנדב לפעילות זו?
+              בטוח/ה שאתה/את רוצה להירשם לעזרה?
             </p>
             <p className="text-indigo-600 font-semibold text-center text-sm mb-6">
               "{request.title}"
@@ -584,13 +584,13 @@ export default function RequestDetailPage() {
                 className="flex-1 bg-indigo-600 text-white font-bold py-3 rounded-2xl hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2"
               >
                 <CheckCircle2 size={18} />
-                כן, אני רוצה לעזור!
+                כן, אני נרשם/ת!
               </button>
               <button
                 onClick={() => setShowConfirmModal(false)}
                 className="flex-1 bg-gray-100 text-gray-700 font-bold py-3 rounded-2xl hover:bg-gray-200 transition-colors"
               >
-                ביטול
+                לא עכשיו
               </button>
             </div>
           </div>
