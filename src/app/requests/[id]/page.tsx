@@ -42,6 +42,14 @@ export default function RequestDetailPage() {
   } = useAppData();
 
   const [showAllVolunteers, setShowAllVolunteers] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [justVolunteered, setJustVolunteered] = useState(false);
+
+  async function handleVolunteerConfirm() {
+    await volunteerForRequest(request!.id, currentUser.id);
+    setShowConfirmModal(false);
+    setJustVolunteered(true);
+  }
 
   const request = requests.find((r) => r.id === params.id);
 
@@ -242,16 +250,25 @@ export default function RequestDetailPage() {
                       <CheckCircle2 size={22} className="text-green-600" />
                     </div>
                     <div>
-                      <p className="font-bold text-green-800">נרשמת לעזרה! 🎉</p>
-                      <p className="text-sm text-green-700">
-                        {isStaffRequest
-                          ? `${creator?.name ?? "המורה/ה"} קיבל/ה התראה על ההצטרפות שלך.`
-                          : "יוצר הבקשה יאשר אותך בקרוב."}
-                      </p>
+                      {justVolunteered ? (
+                        <>
+                          <p className="font-bold text-green-800">תודה שנרשמת! 🎉</p>
+                          <p className="text-sm text-green-700">
+                            הפנייה שלך הועברה לבדיקה — תקבל/י התרעה כשתאושר.
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="font-bold text-green-800">נרשמת לעזרה ✓</p>
+                          <p className="text-sm text-green-700">
+                            הרישום שלך ממתין לאישור. תקבל/י התרעה בקרוב.
+                          </p>
+                        </>
+                      )}
                     </div>
                   </div>
                   <button
-                    onClick={() => volunteerForRequest(request.id, currentUser.id)}
+                    onClick={() => { volunteerForRequest(request.id, currentUser.id); setJustVolunteered(false); }}
                     className="text-xs text-gray-400 hover:text-red-500 font-medium underline flex-shrink-0 transition-colors"
                   >
                     בטל הרשמה
@@ -295,7 +312,7 @@ export default function RequestDetailPage() {
                     </div>
                   </div>
                   <button
-                    onClick={() => volunteerForRequest(request.id, currentUser.id)}
+                    onClick={() => setShowConfirmModal(true)}
                     className={clsx(
                       "flex items-center gap-2 font-bold px-5 py-2.5 rounded-xl transition-all flex-shrink-0 shadow-sm",
                       isStaffRequest
@@ -416,7 +433,7 @@ export default function RequestDetailPage() {
             {/* Quick volunteer button inside sidebar (mobile-friendly) */}
             {canVolunteer && !hasVolunteered && (
               <button
-                onClick={() => volunteerForRequest(request.id, currentUser.id)}
+                onClick={() => setShowConfirmModal(true)}
                 className={clsx(
                   "w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm transition-all",
                   isStaffRequest
@@ -545,6 +562,40 @@ export default function RequestDetailPage() {
           )}
         </div>
       </div>
+      {/* ── Confirmation Modal ──────────────────────────────────────────── */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl">
+            <div className="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <HandHelping size={28} className="text-indigo-600" />
+            </div>
+            <h3 className="text-xl font-black text-gray-900 text-center mb-2">
+              אישור התנדבות
+            </h3>
+            <p className="text-gray-600 text-center text-sm leading-relaxed mb-1">
+              האם אתה/את בטוח/ה שאתה/את רוצה להתנדב לפעילות זו?
+            </p>
+            <p className="text-indigo-600 font-semibold text-center text-sm mb-6">
+              "{request.title}"
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={handleVolunteerConfirm}
+                className="flex-1 bg-indigo-600 text-white font-bold py-3 rounded-2xl hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <CheckCircle2 size={18} />
+                כן, אני רוצה לעזור!
+              </button>
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="flex-1 bg-gray-100 text-gray-700 font-bold py-3 rounded-2xl hover:bg-gray-200 transition-colors"
+              >
+                ביטול
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
