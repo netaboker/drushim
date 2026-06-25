@@ -78,11 +78,11 @@ export default function HomePage() {
           </p>
 
           <h1 className="text-4xl sm:text-5xl font-black leading-tight mb-3 max-w-xl">
-            מעניקים עזרה,<br />
-            <span className="text-sky-300">מגבירים מעורבות</span>
+            יוזמים מעורבות<br />
+            <span className="text-sky-300">חברתית בטוביהו</span>
           </h1>
           <p className="text-blue-100 text-base mb-8 max-w-lg">
-            ראה/י בקשות עזרה פתוחות, התנדב/י ועשה/י את ההבדל בקהילת בית הספר
+            גלה/י הזדמנויות לפעול, להשפיע ולהוביל יוזמות בקהילת בית הספר
           </p>
 
           {/* סטטיסטיקות */}
@@ -107,7 +107,7 @@ export default function HomePage() {
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-2xl font-black text-gray-900">בקשות לעזרה</h2>
           <Link href="/helpers" className="text-sm font-bold text-blue-700 hover:text-blue-800">
-            עוזרים ←
+            מומחים ←
           </Link>
         </div>
 

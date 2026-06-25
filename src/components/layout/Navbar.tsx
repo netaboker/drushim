@@ -26,7 +26,7 @@ import clsx from "clsx";
 const NAV_LINKS = [
   { href: "/", label: "בית", icon: LayoutDashboard },
   { href: "/requests", label: "לוח בקשות", icon: ClipboardList },
-  { href: "/helpers", label: "עוזרים", icon: Users },
+  { href: "/helpers", label: "מומחים", icon: Users },
   { href: "/rankings", label: "דרגות וניקוד", icon: Star },
   { href: "/profile", label: "הפרופיל שלי", icon: User },
 ];

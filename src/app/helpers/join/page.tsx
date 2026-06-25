@@ -112,10 +112,10 @@ export default function JoinHelperPage() {
             </div>
           </div>
 
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">הפרופיל נשלח!</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">פרופיל המומחה נשלח!</h2>
           <p className="text-gray-500 mb-5 leading-relaxed">
-            הפרופיל שלך נשלח למנחם הרצוג לאישור.
-            לאחר האישור תופיע בלוח העוזרים ותקבל/י <strong className="text-amber-600">+25 נקודות</strong>!
+            לקחת יוזמה — כל הכבוד! הפרופיל שלך נשלח לאישור.
+            לאחר האישור תופיע בין המומחים ותקבל/י <strong className="text-amber-600">+25 נקודות</strong>!
           </p>
 
           {/* Flow */}
@@ -151,7 +151,7 @@ export default function JoinHelperPage() {
           </div>
 
           <div className="flex gap-3">
-            <button onClick={() => router.push("/helpers")} className="btn-primary flex-1">לוח עוזרים</button>
+            <button onClick={() => router.push("/helpers")} className="btn-primary flex-1">לרשימת המומחים</button>
             <button onClick={() => router.push("/")} className="btn-ghost">בית</button>
           </div>
         </div>
@@ -163,16 +163,16 @@ export default function JoinHelperPage() {
     <div className="page-container py-8 max-w-2xl animate-fade-in">
       <Link href="/helpers" className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-6 transition-colors">
         <ArrowRight size={16} />
-        חזרה ללוח העוזרים
+        חזרה למומחים
       </Link>
 
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center">
-          <HandHelping size={24} className="text-green-600" />
+        <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
+          <HandHelping size={24} className="text-blue-700" />
         </div>
         <div>
-          <h1 className="text-2xl font-black text-gray-900">הצטרף/י כעוזר/ת</h1>
-          <p className="text-gray-500 text-sm">ספר/י לנו במה תוכל/י לעזור לקהילה</p>
+          <h1 className="text-2xl font-black text-gray-900">הצטרף/י כמומחה</h1>
+          <p className="text-gray-500 text-sm">קח/י יוזמה — שתף/י את הידע שלך עם הקהילה</p>
         </div>
       </div>
 
@@ -208,7 +208,7 @@ export default function JoinHelperPage() {
       <form onSubmit={handleSubmit} className="card p-6 space-y-7">
         {/* Categories */}
         <div>
-          <label className="label">תחומי עזרה <span className="text-red-500">*</span></label>
+          <label className="label">תחומי מומחיות <span className="text-red-500">*</span></label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {CATEGORIES.map((c) => {
               const selected = form.categories.includes(c);
@@ -305,7 +305,7 @@ export default function JoinHelperPage() {
             id="bio"
             value={form.bio}
             onChange={(e) => setForm((prev) => ({ ...prev, bio: e.target.value }))}
-            placeholder="ספר/י לקהילה מי אתה/את, מה מניע אותך לעזור..."
+            placeholder="ספר/י לקהילה מי אתה/את, מה היוזמה שלך, ואיך תוכל/י להשפיע..."
             className={`textarea-field h-28 ${errors.bio ? "border-red-400" : ""}`}
             maxLength={400}
           />
@@ -323,7 +323,7 @@ export default function JoinHelperPage() {
         <div className="flex gap-3 pt-2 border-t border-gray-100">
           <button type="submit" className="btn-primary flex-1">
             <HandHelping size={18} />
-            שלח/י לאישור מנחם הרצוג
+            שלח/י פרופיל מומחה לאישור
           </button>
           <Link href="/helpers" className="btn-ghost flex-shrink-0">ביטול</Link>
         </div>
