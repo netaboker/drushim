@@ -79,11 +79,14 @@ export default function HomePage() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-black leading-tight mb-3 max-w-xl">
-            יחד אנחנו<br />
-            <span className="text-yellow-300">חזקים יותר 💪</span>
+            מעניקים עזרה,<br />
+            <span className="text-yellow-300">מגבירים מעורבות</span>
           </h1>
-          <p className="text-indigo-100 text-lg mb-8 max-w-lg">
-            פה מפרסמים בקשות לעזרה — ותלמידים מתנדבים. פשוט, מהיר, ביחד.
+          <p className="text-indigo-100 text-lg mb-2 max-w-lg font-semibold">
+            לוח הדרושים של טוביהו
+          </p>
+          <p className="text-indigo-200 text-base mb-8 max-w-lg">
+            יש בקשה? פרסמ/י. רוצה לתרום? התנדב/י. ביחד עושים את ההבדל. 🤝
           </p>
 
           {/* סטטיסטיקות */}
