@@ -50,33 +50,27 @@ export default function HelpersPage() {
         </Link>
       </div>
 
-      <div className="card p-5 mb-6 space-y-4">
-        <div className="relative">
-          <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+      <div className="flex gap-2 items-center mb-6">
+        <div className="relative flex-1">
+          <Search size={15} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="חפש/י לפי שם, תחום מומחיות..."
-            className="input-field pr-9"
+            placeholder="חיפוש לפי שם, תחום מומחיות..."
+            className="w-full h-11 pr-9 pl-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
           />
         </div>
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs text-gray-500 font-medium">תחום:</span>
-          <button
-            onClick={() => setSelectedCategory("הכל")}
-            className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${selectedCategory === "הכל" ? "bg-blue-700 text-white border-blue-700" : "bg-white text-gray-600 border-gray-200 hover:border-blue-300"}`}
-          >הכל</button>
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value as RequestCategory | "הכל")}
+          className="h-11 px-3 rounded-xl border border-gray-200 text-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer flex-shrink-0"
+        >
+          <option value="הכל">כל התחומים</option>
           {CATEGORIES.map((c) => (
-            <button
-              key={c}
-              onClick={() => setSelectedCategory(c)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${selectedCategory === c ? "bg-blue-700 text-white border-blue-700" : "bg-white text-gray-600 border-gray-200 hover:border-blue-300"}`}
-            >
-              {CATEGORY_ICONS[c]} {c}
-            </button>
+            <option key={c} value={c}>{CATEGORY_ICONS[c]} {c}</option>
           ))}
-        </div>
+        </select>
       </div>
 
       {filtered.length === 0 ? (

@@ -37,14 +37,6 @@ export default function RootLayout({
         <AuthProvider>
           <AppDataProvider>
             <Navbar />
-            {/* Mobile top bar with logo */}
-            <div className="lg:hidden sticky top-0 z-40 bg-white border-b border-gray-100 px-4 py-2 flex items-center gap-2 shadow-sm">
-              <img src="/logo.png" alt="לוגו" className="w-8 h-8 rounded-full object-cover" />
-              <div>
-                <p className="text-sm font-black text-gray-900 leading-none">לוח טוביהו</p>
-                <p className="text-[10px] text-gray-400 leading-none">תיכון עירוני דוד טוביהו</p>
-              </div>
-            </div>
             <main className="flex-1 pb-20 lg:pb-0">{children}</main>
             <Footer className="hidden lg:block" />
             <BottomNav />
