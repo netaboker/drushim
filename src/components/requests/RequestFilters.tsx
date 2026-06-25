@@ -16,72 +16,60 @@ interface RequestFiltersProps {
   onStatusChange: (v: RequestStatus | "הכל") => void;
 }
 
+const selectClass = "h-11 px-3 rounded-xl border border-gray-200 text-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer flex-shrink-0";
+
 export default function RequestFilters({
-  search,
-  onSearchChange,
-  selectedCategory,
-  onCategoryChange,
-  selectedStatus,
-  onStatusChange,
+  search, onSearchChange, selectedCategory, onCategoryChange, selectedStatus, onStatusChange,
 }: RequestFiltersProps) {
+  const activeFilters = (selectedCategory !== "הכל" ? 1 : 0) + (selectedStatus !== "הכל" ? 1 : 0);
+
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex gap-2 items-center">
       {/* חיפוש */}
-      <div className="relative">
-        <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+      <div className="relative flex-1">
+        <Search size={15} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
         <input
           type="text"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="🔍 חפש/י בקשה..."
-          className="w-full h-11 pr-9 pl-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
+          placeholder="חיפוש..."
+          className="w-full h-11 pr-9 pl-4 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
         />
       </div>
 
-      {/* סטטוס — שורה אחת */}
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        {(["הכל", "פתוח", "בטיפול", "הושלם"] as const).map((s) => (
-          <button
-            key={s}
-            onClick={() => onStatusChange(s as RequestStatus | "הכל")}
-            className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-              selectedStatus === s
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
-          >
-            {s === "הכל" ? "🌟 הכל" : s === "פתוח" ? "🟢 פתוח" : s === "בטיפול" ? "🔵 בטיפול" : "✅ הושלם"}
-          </button>
-        ))}
-      </div>
+      {/* סטטוס */}
+      <select
+        value={selectedStatus}
+        onChange={(e) => onStatusChange(e.target.value as RequestStatus | "הכל")}
+        className={selectClass}
+      >
+        <option value="הכל">כל הסטטוסים</option>
+        <option value="פתוח">פתוח</option>
+        <option value="בטיפול">בטיפול</option>
+        <option value="הושלם">הושלם</option>
+      </select>
 
-      {/* קטגוריות — גלילה אופקית */}
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        <button
-          onClick={() => onCategoryChange("הכל")}
-          className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-            selectedCategory === "הכל"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-          }`}
-        >
-          הכל
-        </button>
+      {/* קטגוריה */}
+      <select
+        value={selectedCategory}
+        onChange={(e) => onCategoryChange(e.target.value as RequestCategory | "הכל")}
+        className={selectClass}
+      >
+        <option value="הכל">כל התחומים</option>
         {CATEGORIES.map((c) => (
-          <button
-            key={c}
-            onClick={() => onCategoryChange(c)}
-            className={`flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              selectedCategory === c
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
-          >
-            <span>{CATEGORY_ICONS[c]}</span>
-            {c}
-          </button>
+          <option key={c} value={c}>{CATEGORY_ICONS[c]} {c}</option>
         ))}
-      </div>
+      </select>
+
+      {/* כפתור ניקוי — רק אם יש פילטר פעיל */}
+      {activeFilters > 0 && (
+        <button
+          onClick={() => { onCategoryChange("הכל"); onStatusChange("הכל"); }}
+          className="h-11 px-3 rounded-xl border border-gray-200 text-xs text-gray-500 hover:bg-gray-50 flex-shrink-0 transition-colors"
+        >
+          נקה ({activeFilters})
+        </button>
+      )}
     </div>
   );
 }
