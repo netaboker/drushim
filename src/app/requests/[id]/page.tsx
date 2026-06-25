@@ -37,6 +37,7 @@ export default function RequestDetailPage() {
     requests,
     loading,
     volunteerForRequest,
+    rejectVolunteer,
     assignHelper,
     updateRequestStatus,
   } = useAppData();
@@ -456,58 +457,96 @@ export default function RequestDetailPage() {
           {/* Volunteers list — visible to request creator and staff/admin */}
           {canSeeVolunteers && volunteers.length > 0 && (
             <div className="card p-5">
-              <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                <HandHelping size={16} className="text-green-500" />
-                {isStaffRequest ? "נרשמו לעזור" : "מתעניינים"} ({volunteers.length})
+              <h3 className="font-bold text-gray-900 mb-1 flex items-center gap-2">
+                <HandHelping size={16} className="text-indigo-500" />
+                בקשות להתנדבות ({volunteers.length})
               </h3>
-              {isStaffRequest && (
-                <p className="text-xs text-green-600 bg-green-50 rounded-lg px-3 py-2 mb-3">
-                  ✓ הרישום אוטומטי — אפשר לאשר עוזרים ישירות
-                </p>
-              )}
-              <div className="space-y-3">
-                {displayedVolunteers.map(({ user, profile }) => (
-                  <div key={user.id} className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <Avatar user={user} size="sm" />
-                      <div>
-                        <p className="text-sm font-medium text-gray-800">{user.name}</p>
-                        <p className="text-xs text-gray-500">
-                          {user.class ?? user.position}
-                          {profile && ` · ${profile.helpCount} עזרות`}
-                        </p>
+              <p className="text-xs text-gray-500 mb-4">
+                כל תלמיד שנרשם מחכה לאישורך — אשר/י או דחה/י כל אחד בנפרד
+              </p>
+
+              {/* Approved */}
+              {assignedHelpers.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-xs font-bold text-green-700 uppercase tracking-wide mb-2 flex items-center gap-1">
+                    <CheckCircle2 size={12} /> מאושרים ({assignedHelpers.length})
+                  </p>
+                  <div className="space-y-2">
+                    {assignedHelpers.map((h) => (
+                      <div key={h.id} className="flex items-center justify-between gap-2 bg-green-50 rounded-xl px-3 py-2">
+                        <div className="flex items-center gap-2">
+                          <Avatar user={h} size="sm" />
+                          <div>
+                            <p className="text-sm font-semibold text-gray-800">{h.name}</p>
+                            <p className="text-xs text-gray-500">{h.class ?? h.position}</p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => assignHelper(request.id, h.id)}
+                          className="text-xs px-2.5 py-1 rounded-lg font-semibold bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-600 transition-colors flex-shrink-0"
+                        >
+                          ✓ מאושר
+                        </button>
                       </div>
-                    </div>
-                    {(canModerate || isCreator) && isOpen && (
-                      <button
-                        onClick={() => assignHelper(request.id, user.id)}
-                        className={clsx(
-                          "text-xs px-2.5 py-1 rounded-lg font-semibold transition-colors flex-shrink-0",
-                          request.assignedHelperIds.includes(user.id)
-                            ? "bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-600"
-                            : "bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-700"
-                        )}
-                      >
-                        {request.assignedHelperIds.includes(user.id) ? "✓ מאושר" : "אשר/י"}
-                      </button>
-                    )}
+                    ))}
                   </div>
-                ))}
-                {volunteers.length > 4 && (
-                  <button
-                    onClick={() => setShowAllVolunteers((v) => !v)}
-                    className="w-full text-xs text-blue-600 font-medium flex items-center justify-center gap-1 py-1 hover:text-blue-700 transition-colors"
-                  >
-                    <ChevronDown
-                      size={14}
-                      className={clsx("transition-transform", showAllVolunteers && "rotate-180")}
-                    />
-                    {showAllVolunteers
-                      ? "הסתר"
-                      : `הצג עוד ${volunteers.length - 4}`}
-                  </button>
-                )}
-              </div>
+                </div>
+              )}
+
+              {/* Pending */}
+              {(() => {
+                const pending = displayedVolunteers.filter(({ user }) => !request.assignedHelperIds.includes(user.id));
+                if (pending.length === 0) return null;
+                return (
+                  <div>
+                    <p className="text-xs font-bold text-amber-700 uppercase tracking-wide mb-2 flex items-center gap-1">
+                      <Clock size={12} /> ממתינים לאישור ({pending.length})
+                    </p>
+                    <div className="space-y-2">
+                      {pending.map(({ user, profile }) => (
+                        <div key={user.id} className="flex items-center justify-between gap-2 bg-amber-50 rounded-xl px-3 py-2">
+                          <div className="flex items-center gap-2">
+                            <Avatar user={user} size="sm" />
+                            <div>
+                              <p className="text-sm font-semibold text-gray-800">{user.name}</p>
+                              <p className="text-xs text-gray-500">
+                                {user.class ?? user.position}
+                                {profile && ` · ${profile.helpCount} עזרות`}
+                              </p>
+                            </div>
+                          </div>
+                          {isOpen && (
+                            <div className="flex gap-1.5 flex-shrink-0">
+                              <button
+                                onClick={() => assignHelper(request.id, user.id)}
+                                className="text-xs px-2.5 py-1.5 rounded-lg font-bold bg-green-600 text-white hover:bg-green-700 transition-colors"
+                              >
+                                אשר/י
+                              </button>
+                              <button
+                                onClick={() => rejectVolunteer(request.id, user.id)}
+                                className="text-xs px-2.5 py-1.5 rounded-lg font-bold bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
+                              >
+                                דחה/י
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {volunteers.length > 4 && (
+                <button
+                  onClick={() => setShowAllVolunteers((v) => !v)}
+                  className="w-full text-xs text-blue-600 font-medium flex items-center justify-center gap-1 py-1 mt-3 hover:text-blue-700 transition-colors"
+                >
+                  <ChevronDown size={14} className={clsx("transition-transform", showAllVolunteers && "rotate-180")} />
+                  {showAllVolunteers ? "הסתר" : `הצג עוד ${volunteers.length - 4}`}
+                </button>
+              )}
             </div>
           )}
 

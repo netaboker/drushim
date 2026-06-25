@@ -75,15 +75,13 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-sm">
-              ט
-            </div>
+            <img src="/logo.png" alt="לוגו טוביהו" className="w-10 h-10 rounded-full object-cover shadow-sm" />
             <div className="hidden sm:block">
               <span className="font-bold text-gray-900 text-lg leading-none">
                 לוח טוביהו
               </span>
               <p className="text-xs text-gray-500 leading-none mt-0.5">
-                לוח הדרושים הבית ספרי
+                תיכון עירוני דוד טוביהו
               </p>
             </div>
           </Link>

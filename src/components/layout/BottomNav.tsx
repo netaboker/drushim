@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Home, ClipboardList, HandHelping, Star, Plus } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";

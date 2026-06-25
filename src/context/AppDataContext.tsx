@@ -52,6 +52,7 @@ interface AppDataContextValue {
   approveRequest: (requestId: string, adminNote?: string) => Promise<void>;
   rejectRequest: (requestId: string, adminNote: string) => Promise<void>;
   volunteerForRequest: (requestId: string, userId: string) => Promise<void>;
+  rejectVolunteer: (requestId: string, userId: string) => Promise<void>;
   assignHelper: (requestId: string, userId: string) => Promise<void>;
   updateRequestStatus: (requestId: string, status: HelpRequest["status"]) => Promise<void>;
   submitHelperProfile: (data: Omit<HelperProfile, "id" | "isApproved" | "helpCount" | "approvalStatus" | "submittedAt">) => Promise<void>;
@@ -159,6 +160,16 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     if (!alreadyIn && req.createdById !== userId) addNotification(req.createdById, "volunteer_received", `🙋 ${getUserDisplayName(userId)} הציע/ה לעזור!`, `נרשמ/ה לבקשה "${req.title}".`, requestId, "request");
   }, [requests]);
 
+  const rejectVolunteer = useCallback(async (requestId: string, userId: string) => {
+    const req = requests.find((r) => r.id === requestId);
+    if (!req) return;
+    const newVols = req.volunteerIds.filter((id) => id !== userId);
+    const { error } = await supabase.from("help_requests").update({ volunteer_ids: newVols, updated_at: new Date().toISOString() }).eq("id", requestId);
+    if (error) { console.error(error); return; }
+    updateCache((prev) => ({ ...prev, requests: prev.requests.map((r) => r.id !== requestId ? r : { ...r, volunteerIds: newVols }) }));
+    addNotification(userId, "request_rejected", "עדכון על בקשת ההתנדבות", `בקשתך להתנדב ל"${req.title}" לא אושרה בשלב זה.`, requestId, "request");
+  }, [requests]);
+
   const assignHelper = useCallback(async (requestId: string, userId: string) => {
     const req = requests.find((r) => r.id === requestId);
     if (!req) return;
@@ -214,7 +225,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     <AppDataContext.Provider value={{
       loading: isLoading, requests, helperProfiles, notifications,
       pendingRequests, pendingHelpers, unreadCount,
-      submitRequest, approveRequest, rejectRequest, volunteerForRequest,
+      submitRequest, approveRequest, rejectRequest, volunteerForRequest, rejectVolunteer,
       assignHelper, updateRequestStatus, submitHelperProfile, approveHelper, rejectHelper,
       markAsRead, markAllAsRead, getNotificationsForUser, getUserDisplayName,
     }}>
