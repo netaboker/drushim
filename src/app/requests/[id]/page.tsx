@@ -571,32 +571,22 @@ export default function RequestDetailPage() {
 
           {/* Admin/Staff actions */}
           {canModerate && (
-            <div className="card p-5 border-2 border-amber-100">
+            <div className="card p-5 border border-amber-100">
               <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2 text-sm">
                 <Shield size={14} className="text-amber-600" />
                 פעולות ניהול
               </h3>
-              <p className="text-xs text-gray-500 font-medium mb-2">שנה סטטוס:</p>
-              <div className="space-y-1.5">
-                {(["פתוח", "בטיפול", "הושלם", "נסגר"] as RequestStatus[]).map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => updateRequestStatus(request.id, s)}
-                    className={clsx(
-                      "w-full text-right text-sm px-3 py-2 rounded-xl border transition-colors font-medium",
-                      request.status === s
-                        ? "border-blue-400 bg-blue-50 text-blue-700"
-                        : "border-gray-200 text-gray-600 hover:border-blue-300 hover:bg-gray-50"
-                    )}
-                  >
-                    {s === "הושלם" && "✅ "}
-                    {s === "נסגר" && "🔴 "}
-                    {s === "בטיפול" && "🔵 "}
-                    {s === "פתוח" && "🟢 "}
-                    {s}
-                  </button>
-                ))}
-              </div>
+              <label className="text-xs text-gray-500 font-medium mb-1.5 block">סטטוס בקשה</label>
+              <select
+                value={request.status}
+                onChange={(e) => updateRequestStatus(request.id, e.target.value as RequestStatus)}
+                className="w-full text-sm px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+              >
+                <option value="פתוח">פתוח</option>
+                <option value="בטיפול">בטיפול</option>
+                <option value="הושלם">הושלם</option>
+                <option value="נסגר">נסגר</option>
+              </select>
             </div>
           )}
         </div>

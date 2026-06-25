@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { HandHelping, Megaphone, Users, CheckCircle2, Sparkles } from "lucide-react";
+import { HandHelping, Megaphone, Users, CheckCircle2 } from "lucide-react";
 import { useAppData } from "@/context/AppDataContext";
 import { useAuth } from "@/context/AuthContext";
 import RequestCard from "@/components/requests/RequestCard";
@@ -34,7 +34,7 @@ export default function HomePage() {
     return (
       <div className="animate-fade-in">
         {/* Hero skeleton */}
-        <section className="bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-700 text-white">
+        <section className="bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900 text-white">
           <div className="page-container py-10">
             <div className="h-6 w-48 bg-white/20 rounded-full mb-5 animate-pulse" />
             <div className="h-10 w-72 bg-white/20 rounded-xl mb-3 animate-pulse" />
@@ -68,41 +68,34 @@ export default function HomePage() {
   return (
     <div className="animate-fade-in">
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-700 text-white overflow-hidden">
-        <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-80 h-80 bg-white/10 rounded-full translate-x-1/3 translate-y-1/3" />
+      <section className="relative bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900 text-white overflow-hidden">
+        <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-white/5 rounded-full translate-x-1/3 translate-y-1/3" />
 
         <div className="page-container py-10 relative">
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-bold mb-5">
-            <Sparkles size={16} className="text-yellow-300" />
-            קהילת בית הספר טוביהו
-          </div>
+          <p className="text-blue-200 text-sm font-semibold mb-4 tracking-wide">
+            תיכון עירוני דוד טוביהו · באר שבע
+          </p>
 
           <h1 className="text-4xl sm:text-5xl font-black leading-tight mb-3 max-w-xl">
             מעניקים עזרה,<br />
-            <span className="text-yellow-300">מגבירים מעורבות</span>
+            <span className="text-sky-300">מגבירים מעורבות</span>
           </h1>
-          <p className="text-indigo-100 text-lg mb-2 max-w-lg font-semibold">
-            לוח הדרושים של טוביהו
-          </p>
-          <p className="text-indigo-200 text-base mb-8 max-w-lg">
-            יש בקשה? פרסמ/י. רוצה לתרום? התנדב/י. ביחד עושים את ההבדל. 🤝
+          <p className="text-blue-100 text-base mb-8 max-w-lg">
+            ראה/י בקשות עזרה פתוחות, התנדב/י ועשה/י את ההבדל בקהילת בית הספר
           </p>
 
           {/* סטטיסטיקות */}
-          <div className="flex gap-6 flex-wrap">
+          <div className="flex gap-8 flex-wrap">
             {[
-              { icon: Megaphone, label: "בקשות פתוחות", value: openCount, color: "text-yellow-300" },
-              { icon: CheckCircle2, label: "עזרות הושלמו", value: doneCount, color: "text-green-300" },
-              { icon: HandHelping, label: "עוזרים פעילים", value: helpersCount, color: "text-blue-300" },
-              { icon: Users, label: "חברי קהילה", value: allUsers.length, color: "text-purple-300" },
-            ].map(({ icon: Icon, label, value, color }) => (
-              <div key={label} className="flex items-center gap-2">
-                <Icon size={20} className={color} />
-                <div>
-                  <p className="text-2xl font-black leading-none">{value}</p>
-                  <p className="text-xs text-indigo-200">{label}</p>
-                </div>
+              { label: "בקשות פתוחות", value: openCount },
+              { label: "עזרות הושלמו", value: doneCount },
+              { label: "עוזרים פעילים", value: helpersCount },
+              { label: "חברי קהילה", value: allUsers.length },
+            ].map(({ label, value }) => (
+              <div key={label}>
+                <p className="text-3xl font-black leading-none">{value}</p>
+                <p className="text-xs text-blue-200 mt-1">{label}</p>
               </div>
             ))}
           </div>
@@ -112,8 +105,8 @@ export default function HomePage() {
       {/* ── בקשות לעזרה ────────────────────────────────────────────────── */}
       <div className="page-container py-8">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-2xl font-black text-gray-900">🙋 בקשות לעזרה</h2>
-          <Link href="/helpers" className="text-sm font-bold text-indigo-600 hover:text-indigo-700">
+          <h2 className="text-2xl font-black text-gray-900">בקשות לעזרה</h2>
+          <Link href="/helpers" className="text-sm font-bold text-blue-700 hover:text-blue-800">
             עוזרים ←
           </Link>
         </div>
@@ -133,8 +126,7 @@ export default function HomePage() {
         {/* רשת הבקשות */}
         {filtered.length === 0 ? (
           <div className="card p-16 text-center">
-            <p className="text-5xl mb-4">🔍</p>
-            <p className="text-gray-500 text-lg font-medium">לא נמצאו בקשות מתאימות</p>
+            <p className="text-gray-400 text-lg font-medium mb-2">לא נמצאו בקשות מתאימות</p>
             <button onClick={() => { setSearch(""); setSelectedCategory("הכל"); setSelectedStatus("הכל"); }} className="btn-primary mt-4">
               נקה פילטרים
             </button>
